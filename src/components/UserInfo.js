@@ -2,6 +2,19 @@ import { Component } from "react";
 import AvatarMock from "../assets/AvatarMock.png";
 
 class UserInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      curTime: "",
+    };
+  }
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        curTime: new Date().toTimeString().split(" ")[0],
+      });
+    }, 1000);
+  }
   render() {
     const revenuestyle = {
       height: "40px",
@@ -39,7 +52,7 @@ class UserInfo extends Component {
         <img style={avastyle} src={AvatarMock} />
         <div>
           <p style={namestyle}>Phong Vũ</p>
-          <p style={timestyle}>1:06:32</p>
+          <p style={timestyle}>{this.state.curTime}</p>
         </div>
       </div>
     );

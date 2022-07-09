@@ -19,6 +19,7 @@ class Order extends Component {
       showDiscount: false,
       orderNum: 0,
       discount: 0,
+      discountType: 0,
       mockorder: [
         {
           item: [
@@ -59,8 +60,8 @@ class Order extends Component {
   handleCloseDiscount() {
     this.setState({ showDiscount: false });
   }
-  handleConfirmDiscount(price) {
-    this.setState({ showDiscount: false, discount: price });
+  handleConfirmDiscount(type, price) {
+    this.setState({ showDiscount: false, discountType: type, discount: price });
   }
   getTotal() {
     let total = 0;
@@ -348,17 +349,31 @@ class Order extends Component {
                 </td>
               </tr>
               {this.state.discount != 0 ? (
-                <tr style={customdiscountstyle}>
-                  <td colSpan={4} style={itemnamestyle}>
-                    CHIẾT KHẤU HÓA ĐƠN - {this.state.discount}%
-                  </td>
-                  <td style={customdiscounttotalstyle}>
-                    {displayPrice(
-                      (this.getTotalBeforeDiscount() / 100) *
-                        this.state.discount
-                    )}
-                  </td>
-                </tr>
+                <>
+                  {this.state.discountType == 1 ? (
+                    <tr style={customdiscountstyle}>
+                      <td colSpan={4} style={itemnamestyle}>
+                        CHIẾT KHẤU HÓA ĐƠN - {this.state.discount}%
+                      </td>
+                      <td style={customdiscounttotalstyle}>
+                        -
+                        {displayPrice(
+                          (this.getTotalBeforeDiscount() / 100) *
+                            this.state.discount
+                        )}
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr style={customdiscountstyle}>
+                      <td colSpan={4} style={itemnamestyle}>
+                        CHIẾT KHẤU HÓA ĐƠN - {displayPrice(this.state.discount)}
+                      </td>
+                      <td style={customdiscounttotalstyle}>
+                        -{displayPrice(this.state.discount)}
+                      </td>
+                    </tr>
+                  )}
+                </>
               ) : (
                 <></>
               )}
@@ -400,9 +415,13 @@ class Order extends Component {
             />
             <CheckoutButton
               total={
-                this.getTotal() +
-                this.getTotalBeforeDiscount() / 10 -
-                (this.getTotalBeforeDiscount() / 100) * this.state.discount
+                this.state.discountType == 2
+                  ? this.getTotal() +
+                    this.getTotalBeforeDiscount() / 10 -
+                    this.state.discount
+                  : this.getTotal() +
+                    this.getTotalBeforeDiscount() / 10 -
+                    (this.getTotalBeforeDiscount() / 100) * this.state.discount
               }
             />
           </div>

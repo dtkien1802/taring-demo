@@ -36,7 +36,7 @@ class Item extends Component {
           <p style={descstyle}>Rayban - Kho: 120</p>
           <p style={pricestyle}>
             120,000
-            <img src={GreenTag} />
+            <img style={{ marginLeft: "4px" }} src={GreenTag} />
           </p>
         </div>
         <img src={ItemMock}></img>

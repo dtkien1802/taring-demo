@@ -1,13 +1,34 @@
 import { Component } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import MessageIcon from "../assets/MessageIcon.svg";
 import OrangeCloseIcon from "../assets/OrangeCloseIcon.svg";
+import "react-toastify/dist/ReactToastify.css";
+import { css } from "glamor";
 
 class Notification extends Component {
+  notify() {
+    toast(
+      <>
+        <div style={{ display: "flex" }}>
+          <p>Em ơi, hôm nay đóng cửa kiểm hàng lúc 16:00</p>
+        </div>
+        <img src={OrangeCloseIcon} />
+      </>,
+      {
+        className: css({
+          background: "#FDF1E5 !important",
+        }),
+      }
+    );
+  }
   render() {
-    const mainstyle = {
-      backgroundColor: "#FDF1E5",
+    const toaststyle = {
       width: "443px",
       height: "40px",
+    };
+    const mainstyle = {
+      background: "#FDF1E5",
+
       padding: "10px",
       boxSizing: "border-box",
       fontSize: "14px",
@@ -17,16 +38,18 @@ class Notification extends Component {
       borderRadius: "4px",
       color: "#FF881B",
     };
-    const logostyle = {
-      marginRight: "10px",
-    };
+    const logostyle = {};
     return (
       <div style={mainstyle}>
-        <div style={{ display: "flex" }}>
-          <img src={MessageIcon} style={logostyle} />
-          <p>Em ơi, hôm nay đóng cửa kiểm hàng lúc 16:00</p>
-        </div>
-        <img src={OrangeCloseIcon} />
+        <button onClick={this.notify}>Notify !</button>
+        <ToastContainer
+          style={toaststyle}
+          icon={false}
+          closeButton={
+            <img src={MessageIcon} style={{ marginRight: "10px" }} />
+          }
+          autoClose={false}
+        />
       </div>
     );
   }

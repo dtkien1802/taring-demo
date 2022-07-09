@@ -11,12 +11,14 @@ class DiscountModal extends Component {
       amount: 0,
       type: 1,
     };
+    this.handleChangeType = this.handleChangeType.bind(this);
   }
   handleChangeAmount(i) {
     this.setState({ amount: i });
   }
-  handleChangeType(i) {
-    this.setState({ type: i });
+  handleChangeType(e) {
+    this.setState({ amount: 0, type: e.target.value });
+    // console.log("handle");
   }
   render() {
     const mainstyle = {
@@ -81,21 +83,28 @@ class DiscountModal extends Component {
             width: "500px",
             marginBottom: "16px",
           }}
-          // onChange={this.handleChangeType(2)}
+          onChange={this.handleChangeType}
         >
           <div style={typestyle}>
             <input
               type="radio"
               name="discount_type"
               id="percent_discount"
-              checked
+              checked={this.state.type == 1}
+              value={1}
             />
             <label style={{ marginLeft: "16px" }} for="percent_discount">
               Chiết khấu theo %
             </label>
           </div>
           <div style={typestyle}>
-            <input type="radio" name="discount_type" id="price_discount" />
+            <input
+              type="radio"
+              name="discount_type"
+              id="price_discount"
+              checked={this.state.type == 2}
+              value={2}
+            />
             <label style={{ marginLeft: "16px" }} for="price_discount">
               Chiết khấu giá tiền
             </label>
@@ -103,45 +112,79 @@ class DiscountModal extends Component {
         </div>
         <input
           style={discountinputstyle}
-          value={this.state.amount == 0 ? "" : this.state.amount + "%"}
+          value={
+            this.state.amount == 0
+              ? ""
+              : this.state.type == 1
+              ? this.state.amount + "%"
+              : this.state.amount
+          }
         ></input>
-        {this.state.type == 1 ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "496px",
-              marginBottom: "16px",
-            }}
-          >
-            <button
-              style={discountbuttonstyle}
-              onClick={() => this.handleChangeAmount(5)}
-            >
-              5%
-            </button>
-            <button
-              style={discountbuttonstyle}
-              onClick={() => this.handleChangeAmount(10)}
-            >
-              10%
-            </button>
-            <button
-              style={discountbuttonstyle}
-              onClick={() => this.handleChangeAmount(15)}
-            >
-              15%
-            </button>
-            <button
-              style={discountbuttonstyle}
-              onClick={() => this.handleChangeAmount(20)}
-            >
-              20%
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "496px",
+            marginBottom: "16px",
+          }}
+        >
+          {this.state.type == 1 ? (
+            <>
+              <button
+                style={discountbuttonstyle}
+                onClick={() => this.handleChangeAmount(5)}
+              >
+                5%
+              </button>
+              <button
+                style={discountbuttonstyle}
+                onClick={() => this.handleChangeAmount(10)}
+              >
+                10%
+              </button>
+              <button
+                style={discountbuttonstyle}
+                onClick={() => this.handleChangeAmount(15)}
+              >
+                15%
+              </button>
+              <button
+                style={discountbuttonstyle}
+                onClick={() => this.handleChangeAmount(20)}
+              >
+                20%
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                style={discountbuttonstyle}
+                onClick={() => this.handleChangeAmount(2000)}
+              >
+                2,000
+              </button>
+              <button
+                style={discountbuttonstyle}
+                onClick={() => this.handleChangeAmount(20000)}
+              >
+                20,000
+              </button>
+              <button
+                style={discountbuttonstyle}
+                onClick={() => this.handleChangeAmount(200000)}
+              >
+                200,000
+              </button>
+              <button
+                style={discountbuttonstyle}
+                onClick={() => this.handleChangeAmount(2000000)}
+              >
+                2,000,000
+              </button>
+            </>
+          )}
+        </div>
 
         <div style={{ width: "100%" }}>
           <p
@@ -154,7 +197,9 @@ class DiscountModal extends Component {
           >
             Tương đương:{" "}
             <span style={{ color: "#2E7CD9" }}>
-              {displayPrice((this.props.total / 100) * this.state.amount)}
+              {this.state.type == 1
+                ? displayPrice((this.props.total / 100) * this.state.amount)
+                : displayPrice(this.state.amount)}
             </span>
           </p>
         </div>
@@ -181,7 +226,12 @@ class DiscountModal extends Component {
             Hủy
           </button>
           <button
-            onClick={() => this.props.handleConfirmDiscount(this.state.amount)}
+            onClick={() =>
+              this.props.handleConfirmDiscount(
+                this.state.type,
+                this.state.amount
+              )
+            }
             style={{
               width: "328px",
               height: "48px",
