@@ -1,7 +1,9 @@
 import { Component } from "react";
 import displayPrice from "../../utils/displayPrice";
 import BackButton from "./BackButton";
+import Bill from "./Bill";
 import ConfirmButton from "./ConfirmButton";
+import PaymentMethod from "./PaymentMethod";
 
 class Payment extends Component {
   constructor(props) {
@@ -39,9 +41,6 @@ class Payment extends Component {
       fontWeight: 700,
       color: "#969696",
     };
-    const billstyle = {
-      width: "292px",
-    };
     return (
       <div style={mainstyle}>
         <div>
@@ -61,46 +60,21 @@ class Payment extends Component {
               );
             })}
           </div>
-          <div style={billstyle}>
-            <p>
-              {this.props.orders[this.state.orderNum].customerID === 0
-                ? "KHÁCH VÃNG LAI"
-                : "KHÁCH "}
-            </p>
-            <table>
-              <tr>
-                <td>Dư nợ</td>
-                <td>
-                  {this.props.orders[this.state.orderNum].customerID === 0
-                    ? displayPrice(0) + " VND"
-                    : ""}
-                </td>
-              </tr>
-              <tr>
-                <td>Hóa đơn</td>
-                <td>
-                  {displayPrice(this.props.orders[this.state.orderNum].total) +
-                    " VND"}
-                </td>
-              </tr>
-              <tr>
-                <td>Khách đã trả (-)</td>
-                <td>{displayPrice(this.state.payedAmmount) + " VND"}</td>
-              </tr>
-              <tr>
-                <td>Khách trả thiếu:</td>
-                <td>
-                  {displayPrice(
-                    this.state.payedAmmount -
-                      this.props.orders[this.state.orderNum].total
-                  ) + " VND"}
-                </td>
-              </tr>
-            </table>
-            <p>
-              Quét mã QR trên Taring Shopper App hoặc tìm kiếm theo số điện
-              thoại để nhập thông tin khách hàng
-            </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginTop: "38px",
+            }}
+          >
+            <Bill
+              customerID={this.props.orders[this.state.orderNum].customerID}
+              total={this.props.orders[this.state.orderNum].total}
+              payedAmmount={this.state.payedAmmount}
+            />
+            <PaymentMethod
+              total={this.props.orders[this.state.orderNum].total}
+            />
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>

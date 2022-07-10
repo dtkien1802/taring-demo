@@ -1,4 +1,5 @@
 export default function displayPrice(num) {
+  if (num == 0) return "0,000";
   let temp = "";
   temp += num;
   let result = "";
