@@ -7,7 +7,6 @@ import DiscountButton from "./DiscountButton";
 import CancelButton from "./CancelButton";
 import CheckoutButton from "./CheckoutButton";
 import displayPrice from "../../utils/displayPrice";
-import ReactModal from "react-modal";
 import ConfirmModal from "./ConfirmModal";
 import DiscountModal from "./DiscountModal";
 
@@ -20,27 +19,6 @@ class Order extends Component {
       orderNum: 0,
       discount: 0,
       discountType: 0,
-      mockorder: [
-        {
-          item: [
-            {
-              name: "Kính mắt Z001",
-              unit: "Hộp",
-              quantity: 1,
-              price: 520000,
-              discount: 10,
-              discountName: "SẢN PHẨM MỚI   -   Giảm giá 10% kính mắt Z001",
-            },
-            {
-              name: "Giày rayban",
-              unit: "Đôi",
-              quantity: 1,
-              price: 890000,
-              discount: 0,
-            },
-          ],
-        },
-      ],
     };
     this.handleOpenConfirm = this.handleOpenConfirm.bind(this);
     this.handleOpenDiscount = this.handleOpenDiscount.bind(this);
@@ -65,8 +43,8 @@ class Order extends Component {
   }
   getTotal() {
     let total = 0;
-    if (this.state.mockorder[this.state.orderNum].item) {
-      for (let item of this.state.mockorder[this.state.orderNum].item) {
+    if (this.props.orders[this.state.orderNum].item) {
+      for (let item of this.props.orders[this.state.orderNum].item) {
         total =
           total + (item.price / 100) * (100 - item.discount) * item.quantity;
       }
@@ -75,8 +53,8 @@ class Order extends Component {
   }
   getTotalBeforeDiscount() {
     let total = 0;
-    if (this.state.mockorder[this.state.orderNum].item) {
-      for (let item of this.state.mockorder[this.state.orderNum].item) {
+    if (this.props.orders[this.state.orderNum].item) {
+      for (let item of this.props.orders[this.state.orderNum].item) {
         total = total + item.price * item.quantity;
       }
     }
@@ -86,21 +64,17 @@ class Order extends Component {
     this.setState({ orderNum: i });
   }
   handleAddOrder() {
-    const mockorder = this.state.mockorder.slice();
-    this.setState({
-      mockorder: mockorder.concat([{}]),
-    });
+    const orders = this.props.orders.slice();
+    this.props.handleChangeOrder(orders.concat([{}]));
   }
   handleChangeQuantity(itemIndex, i) {
-    const mockorder = this.state.mockorder.slice();
-    if (mockorder[this.state.orderNum].item[itemIndex].quantity + i == 0) {
-      mockorder[this.state.orderNum].item.splice(itemIndex, 1);
+    const orders = this.props.orders.slice();
+    if (orders[this.state.orderNum].item[itemIndex].quantity + i === 0) {
+      orders[this.state.orderNum].item.splice(itemIndex, 1);
     } else {
-      mockorder[this.state.orderNum].item[itemIndex].quantity += i;
+      orders[this.state.orderNum].item[itemIndex].quantity += i;
     }
-    this.setState({
-      mockorder: mockorder,
-    });
+    this.props.handleChangeOrder(orders);
   }
   render() {
     const mainstyle = {
@@ -253,11 +227,11 @@ class Order extends Component {
         <table style={tablestyle}>
           <tr style={navstyle}>
             <th style={{ textAlign: "left", display: "flex" }}>
-              {this.state.mockorder.map((order, index) => {
+              {this.props.orders.map((order, index) => {
                 return (
                   <button
                     style={
-                      this.state.orderNum == index
+                      this.state.orderNum === index
                         ? orderbuttonstyleactive
                         : orderbuttonstyle
                     }
@@ -271,8 +245,8 @@ class Order extends Component {
                 style={addorderbuttonstyle}
                 onClick={() => this.handleAddOrder()}
               >
-                Đơn hàng {this.state.mockorder.length + 1}
-                <img style={addorderlogostyle} src={PlusIcon} />
+                Đơn hàng {this.props.orders.length + 1}
+                <img style={addorderlogostyle} src={PlusIcon} alt="add-order" />
               </button>
             </th>
             <th style={headerstyle}>Đơn vị tính</th>
@@ -280,16 +254,16 @@ class Order extends Component {
             <th style={headerstyle}>Đơn giá</th>
             <th>Thành tiền</th>
           </tr>
-          {this.state.mockorder[this.state.orderNum].item &&
-          this.state.mockorder[this.state.orderNum].item.length != 0 ? (
+          {this.props.orders[this.state.orderNum].item &&
+          this.props.orders[this.state.orderNum].item.length !== 0 ? (
             <>
-              {this.state.mockorder[this.state.orderNum].item.map(
+              {this.props.orders[this.state.orderNum].item.map(
                 (item, index) => {
                   return (
                     <>
                       <tr
                         style={
-                          item.discount != 0 ? itemstylewdiscount : itemstyle
+                          item.discount !== 0 ? itemstylewdiscount : itemstyle
                         }
                       >
                         <td style={itemnamestyle}>{item.name}</td>
@@ -305,6 +279,7 @@ class Order extends Component {
                                 this.handleChangeQuantity(index, -1)
                               }
                               src={MinusCircleIcon}
+                              alt="minus-circle-icon"
                             />
                             {item.quantity}
                             <img
@@ -312,6 +287,7 @@ class Order extends Component {
                                 this.handleChangeQuantity(index, 1)
                               }
                               src={PlusCircleIcon}
+                              alt="plus-circle-icon"
                             />
                           </div>
                         </td>
@@ -320,7 +296,7 @@ class Order extends Component {
                           {displayPrice(item.price * item.quantity)}
                         </td>
                       </tr>
-                      {item.discount == 0 ? (
+                      {item.discount === 0 ? (
                         <></>
                       ) : (
                         <tr style={discountstyle}>
@@ -348,9 +324,9 @@ class Order extends Component {
                   {displayPrice(this.getTotalBeforeDiscount() / 10)}
                 </td>
               </tr>
-              {this.state.discount != 0 ? (
+              {this.state.discount !== 0 ? (
                 <>
-                  {this.state.discountType == 1 ? (
+                  {this.state.discountType === 1 ? (
                     <tr style={customdiscountstyle}>
                       <td colSpan={4} style={itemnamestyle}>
                         CHIẾT KHẤU HÓA ĐƠN - {this.state.discount}%
@@ -382,7 +358,7 @@ class Order extends Component {
             <tr>
               <td colspan={5}>
                 <div style={emptyorderstyle}>
-                  <img src={Barcode} />
+                  <img src={Barcode} alt="barcode" />
                   <p style={emptyordermessagestyle}>
                     Quét barcode sản phẩm để bắt đầu thanh toán
                   </p>
@@ -415,7 +391,7 @@ class Order extends Component {
             />
             <CheckoutButton
               total={
-                this.state.discountType == 2
+                this.state.discountType === 2
                   ? this.getTotal() +
                     this.getTotalBeforeDiscount() / 10 -
                     this.state.discount
@@ -423,6 +399,7 @@ class Order extends Component {
                     this.getTotalBeforeDiscount() / 10 -
                     (this.getTotalBeforeDiscount() / 100) * this.state.discount
               }
+              onClick={this.props.handleCheckout}
             />
           </div>
         </div>

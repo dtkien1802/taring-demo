@@ -3,7 +3,7 @@ import WhiteTickIcon from "../../assets/WhiteTickIcon.svg";
 import GrayTickIcon from "../../assets/GrayTickIcon.svg";
 import displayPrice from "../../utils/displayPrice";
 
-class CheckoutButton extends Component {
+class ConfirmButton extends Component {
   constructor(props) {
     super(props);
   }
@@ -46,20 +46,18 @@ class CheckoutButton extends Component {
     return (
       <button
         disabled={this.props.total == 0 ? true : false}
-        style={this.props.total == 0 ? mainstyledisabled : mainstyle}
-        onClick={this.props.onClick}
+        style={this.props.total !== 0 ? mainstyledisabled : mainstyle}
       >
         <div>
           <img
-            src={this.props.total == 0 ? GrayTickIcon : WhiteTickIcon}
+            src={this.props.total !== 0 ? GrayTickIcon : WhiteTickIcon}
             style={logostyle}
           />
-          THANH TOÁN
+          GHI NỢ {displayPrice(this.props.total)} VND
         </div>
-        <p>{displayPrice(this.props.total) + " VND"}</p>
       </button>
     );
   }
 }
 
-export default CheckoutButton;
+export default ConfirmButton;

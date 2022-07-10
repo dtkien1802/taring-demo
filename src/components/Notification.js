@@ -12,7 +12,7 @@ class Notification extends Component {
         <div style={{ display: "flex" }}>
           <p>Em ơi, hôm nay đóng cửa kiểm hàng lúc 16:00</p>
         </div>
-        <img src={OrangeCloseIcon} />
+        <img src={OrangeCloseIcon} alt="close-icon" />
       </>,
       {
         className: css({
@@ -28,7 +28,6 @@ class Notification extends Component {
     };
     const mainstyle = {
       background: "#FDF1E5",
-
       padding: "10px",
       boxSizing: "border-box",
       fontSize: "14px",
@@ -38,7 +37,6 @@ class Notification extends Component {
       borderRadius: "4px",
       color: "#FF881B",
     };
-    const logostyle = {};
     return (
       <div style={mainstyle}>
         <button onClick={this.notify}>Notify !</button>
@@ -46,7 +44,11 @@ class Notification extends Component {
           style={toaststyle}
           icon={false}
           closeButton={
-            <img src={MessageIcon} style={{ marginRight: "10px" }} />
+            <img
+              src={MessageIcon}
+              style={{ marginRight: "10px" }}
+              alt="message-icon"
+            />
           }
           autoClose={false}
         />

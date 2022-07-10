@@ -13,7 +13,9 @@ class SearchBox extends Component {
       fontFamily: "Nunito Sans",
       paddingLeft: "12px",
     };
-    return <input style={mainstyle} placeholder="All/ Rayban"></input>;
+    return (
+      <input style={mainstyle} placeholder={this.props.placeholder}></input>
+    );
   }
 }
 

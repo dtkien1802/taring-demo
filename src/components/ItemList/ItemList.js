@@ -1,6 +1,6 @@
 import { Component } from "react";
 import List from "./List";
-import SearchBox from "./SearchBox";
+import SearchBox from "../SearchBox";
 
 class ItemList extends Component {
   render() {
@@ -13,7 +13,7 @@ class ItemList extends Component {
     };
     return (
       <div style={mainstyle}>
-        <SearchBox />
+        <SearchBox placeholder="All/ Rayban" />
         <List />
       </div>
     );
