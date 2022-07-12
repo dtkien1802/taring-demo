@@ -45,15 +45,20 @@ class ConfirmButton extends Component {
     };
     return (
       <button
-        disabled={this.props.total == 0 ? true : false}
-        style={this.props.total !== 0 ? mainstyledisabled : mainstyle}
+        // disabled={this.props.total == 0 ? true : false}
+        style={this.props.total > 0 ? mainstyledisabled : mainstyle}
+        onClick={this.props.onClick}
       >
         <div>
           <img
-            src={this.props.total !== 0 ? GrayTickIcon : WhiteTickIcon}
+            src={this.props.total > 0 ? GrayTickIcon : WhiteTickIcon}
             style={logostyle}
           />
-          GHI NỢ {displayPrice(this.props.total)} VND
+          {this.props.total > 0 ? (
+            <>GHI NỢ {displayPrice(this.props.total)} VND</>
+          ) : (
+            <>HOÀN THÀNH</>
+          )}
         </div>
       </button>
     );

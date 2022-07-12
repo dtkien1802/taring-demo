@@ -10,9 +10,13 @@ class Notification extends Component {
     toast(
       <>
         <div style={{ display: "flex" }}>
+          <img
+            src={MessageIcon}
+            style={{ marginRight: "10px" }}
+            alt="message-icon"
+          />
           <p>Em ơi, hôm nay đóng cửa kiểm hàng lúc 16:00</p>
         </div>
-        <img src={OrangeCloseIcon} alt="close-icon" />
       </>,
       {
         className: css({
@@ -25,6 +29,7 @@ class Notification extends Component {
     const toaststyle = {
       width: "443px",
       height: "40px",
+      boxSizing: "border-box",
     };
     const mainstyle = {
       background: "#FDF1E5",
@@ -38,18 +43,18 @@ class Notification extends Component {
       color: "#FF881B",
     };
     return (
-      <div style={mainstyle}>
+      <div>
         <button onClick={this.notify}>Notify !</button>
         <ToastContainer
-          style={toaststyle}
+          // style={{ width: "2000px" }}
+          position="top-center"
+          style={{
+            width: "451px",
+            height: "40px !important",
+            boxSizing: "border-box",
+          }}
           icon={false}
-          closeButton={
-            <img
-              src={MessageIcon}
-              style={{ marginRight: "10px" }}
-              alt="message-icon"
-            />
-          }
+          closeButton={<img src={OrangeCloseIcon} alt="close-icon" />}
           autoClose={false}
         />
       </div>

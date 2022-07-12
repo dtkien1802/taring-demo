@@ -1,9 +1,10 @@
 import { Component } from "react";
-import displayPrice from "../../utils/displayPrice";
 import BackButton from "./BackButton";
 import Bill from "./Bill";
 import ConfirmButton from "./ConfirmButton";
 import PaymentMethod from "./PaymentMethod";
+import ReactLoading from "react-loading";
+import BlueTickIcon from "../../assets/BlueTickIcon.svg";
 
 class Payment extends Component {
   constructor(props) {
@@ -11,9 +12,23 @@ class Payment extends Component {
     this.state = {
       orderNum: 0,
       payedAmmount: 0,
+      step: 1,
     };
+    this.handleChangePayedAmount = this.handleChangePayedAmount.bind(this);
+    this.handleCheckout = this.handleCheckout.bind(this);
   }
-
+  handleChangePayedAmount(amount) {
+    this.setState({ payedAmmount: amount });
+  }
+  handleCheckout() {
+    this.setState({ step: 2 });
+    setInterval(() => {
+      this.setState({ step: 3 });
+    }, 3000);
+  }
+  handleChangeOrder(i) {
+    this.setState({ orderNum: i });
+  }
   render() {
     const mainstyle = {
       display: "flex",
@@ -41,6 +56,24 @@ class Payment extends Component {
       fontWeight: 700,
       color: "#969696",
     };
+    const loadingstyle = {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      flexGrow: 1,
+      fontWeight: 700,
+      fontSize: "24px",
+    };
+    const bluetickstyle = {
+      width: "64px",
+      height: "64px",
+      borderRadius: "100%",
+      backgroundColor: "#E5F1FF",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    };
     return (
       <div style={mainstyle}>
         <div>
@@ -60,32 +93,56 @@ class Payment extends Component {
               );
             })}
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              marginTop: "38px",
-            }}
-          >
-            <Bill
-              customerID={this.props.orders[this.state.orderNum].customerID}
-              total={this.props.orders[this.state.orderNum].total}
-              payedAmmount={this.state.payedAmmount}
-            />
-            <PaymentMethod
-              total={this.props.orders[this.state.orderNum].total}
+
+          {this.state.step == 1 ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginTop: "38px",
+              }}
+            >
+              <Bill
+                customerID={this.props.orders[this.state.orderNum].customerID}
+                total={this.props.orders[this.state.orderNum].total}
+                payedAmmount={this.state.payedAmmount}
+              />
+              <PaymentMethod
+                total={this.props.orders[this.state.orderNum].total}
+                handleChange={this.handleChangePayedAmount}
+                value={
+                  this.state.payedAmmount === 0 ? "" : this.state.payedAmmount
+                }
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+        {this.state.step == 1 ? (
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <BackButton onClick={this.props.handleBackCheckout} />
+            <ConfirmButton
+              total={
+                this.props.orders[this.state.orderNum].total -
+                this.state.payedAmmount
+              }
+              onClick={this.handleCheckout}
             />
           </div>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <BackButton onClick={this.props.handleBackCheckout} />
-          <ConfirmButton
-            total={
-              this.props.orders[this.state.orderNum].total -
-              this.state.payedAmmount
-            }
-          />
-        </div>
+        ) : this.state.step == 2 ? (
+          <div style={loadingstyle}>
+            <p style={{ marginBottom: "42px" }}>Hóa đơn đang được tạo</p>
+            <ReactLoading type="spinningBubbles" color={"#2E7CD9"} />
+          </div>
+        ) : (
+          <div style={loadingstyle}>
+            <p style={{ marginBottom: "42px" }}>Thanh toán thành công</p>
+            <div style={bluetickstyle}>
+              <img src={BlueTickIcon}></img>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

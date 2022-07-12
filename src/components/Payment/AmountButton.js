@@ -16,7 +16,14 @@ class AmountButton extends Component {
       height: "48px",
       border: 0,
     };
-    return <button style={mainstyle}>{displayPrice(this.props.amount)}</button>;
+    return (
+      <button
+        onClick={() => this.props.onClick(this.props.amount)}
+        style={mainstyle}
+      >
+        {displayPrice(this.props.amount)}
+      </button>
+    );
   }
 }
 

@@ -87,11 +87,23 @@ class PaymentMethod extends Component {
             active={this.state.type === 3 ? true : false}
           />
         </div>
-        <input style={inputstyle} placeholder="Nhập số tiền khách trả"></input>
+        <input
+          style={inputstyle}
+          placeholder="Nhập số tiền khách trả"
+          value={this.props.value}
+          onChange={(event) => this.props.handleChange(event.target.value)}
+        ></input>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <AmountButton amount={Math.ceil(this.props.total / 1000) * 1000} />
-          <AmountButton amount={Math.ceil(this.props.total / 10000) * 10000} />
           <AmountButton
+            onClick={this.props.handleChange}
+            amount={Math.ceil(this.props.total / 1000) * 1000}
+          />
+          <AmountButton
+            onClick={this.props.handleChange}
+            amount={Math.ceil(this.props.total / 10000) * 10000}
+          />
+          <AmountButton
+            onClick={this.props.handleChange}
             amount={Math.ceil(this.props.total / 100000) * 100000}
           />
         </div>

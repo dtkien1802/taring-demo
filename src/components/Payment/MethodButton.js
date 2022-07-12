@@ -39,7 +39,10 @@ class MethodButton extends Component {
         style={this.props.active ? mainactivestyle : mainstyle}
         onClick={() => this.props.onClick(this.props.type)}
       >
-        <img style={logostyle} src={this.props.icon} />
+        <img
+          style={logostyle}
+          src={this.props.active ? this.props.iconActive : this.props.icon}
+        />
         {this.props.name}
       </button>
     );

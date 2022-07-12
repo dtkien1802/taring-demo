@@ -29,6 +29,11 @@ class Bill extends Component {
       fontWeight: 700,
       color: "#F23030",
     };
+    const totalextrastyle = {
+      fontSize: "14px",
+      fontWeight: 700,
+      color: "#2E7CD9",
+    };
     const notestyle = {
       fontSize: "14px",
       fontWeight: 600,
@@ -64,8 +69,18 @@ class Bill extends Component {
             </td>
           </tr>
           <tr style={dividerstyle}></tr>
-          <tr style={totalstyle}>
-            <td>Khách trả thiếu:</td>
+          <tr
+            style={
+              this.props.payedAmmount - this.props.total < 0
+                ? totalstyle
+                : totalextrastyle
+            }
+          >
+            <td>
+              {this.props.payedAmmount - this.props.total < 0
+                ? "Khách trả thiếu:"
+                : "Khách trả thừa:"}
+            </td>
             <td style={pricestyle}>
               {displayPrice(this.props.payedAmmount - this.props.total) +
                 " VND"}

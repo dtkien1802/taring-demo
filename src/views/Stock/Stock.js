@@ -35,6 +35,7 @@ class Stock extends Component {
         },
         {
           customerID: 0,
+          total: 0,
         },
       ],
     };
