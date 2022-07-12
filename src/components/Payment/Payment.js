@@ -24,6 +24,9 @@ class Payment extends Component {
     this.setState({ step: 2 });
     setInterval(() => {
       this.setState({ step: 3 });
+      setInterval(() => {
+        this.setState({ step: 1 });
+      }, 2000);
     }, 3000);
   }
   handleChangeOrder(i) {
